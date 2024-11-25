@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 const primaryColor = Color(0xFF2697FF);
-const secondaryColor = Color(0xFF2A2D3E);
-const bgColor = Color(0xFF212332);
+const secondaryColor = Color.fromARGB(255, 255, 255, 255);
+const bgColor = Color.fromARGB(255, 33, 40, 50);
 
 const defaultPadding = 16.0;
+bool drawersidemenu = false;
