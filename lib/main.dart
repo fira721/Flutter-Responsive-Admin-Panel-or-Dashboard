@@ -16,12 +16,33 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Admin Panel',
-      theme: ThemeData.dark().copyWith(
+      theme: ThemeData.light().copyWith(
+        dataTableTheme: DataTableThemeData(
+            dataRowColor: WidgetStatePropertyAll(Colors.amber),
+            headingRowColor: WidgetStatePropertyAll(Colors.amber),
+            
+            decoration: BoxDecoration(color: Colors.white)),
         scaffoldBackgroundColor: const Color(0XFFEFEFEF),
         textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme)
             .apply(bodyColor: const Color.fromARGB(255, 39, 39, 39)),
-       canvasColor: secondaryColor,
+        canvasColor: const Color.fromARGB(255, 255, 255, 255),
+        // dataTableTheme: DataTableThemeData(
+        //   headingRowColor: MaterialStateProperty.all(Colors.blue[300]),
+        //   dataRowColor: MaterialStateProperty.all(Colors.white),
+        // ),
       ),
+
+      //     theme: ThemeData.dark().copyWith(
+      //   scaffoldBackgroundColor: Colors.grey[900],
+      //   cardColor: Colors.grey[850],
+      //   dataTableTheme: DataTableThemeData(
+      //     headingRowColor: MaterialStateProperty.all(Colors.blue[300]),
+      //     dataRowColor: MaterialStateProperty.all(Colors.grey[800]),
+      //   ),
+      //   textTheme: TextTheme(
+      //     bodyMedium: TextStyle(color: Colors.white),
+      //   ),
+      // ),
       home: MainScreen(),
     );
   }

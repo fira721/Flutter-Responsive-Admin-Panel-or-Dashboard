@@ -38,17 +38,18 @@ class _AbsensiScreenState extends State<AbsensiScreen> {
             // Map the dynamic data to Map<String, String>
             _absensiData = List<Map<String, String>>.from(
               responseData['data'].map((item) => {
-                'userid': item['userid'].toString(),
-                'tanggal': item['tanggal'].toString(),
-                'absen_masuk': item['absen_masuk'].toString(),
-                'absen_pulang': item['absen_pulang'].toString(),
-                'latitude_masuk': item['latitude_masuk'].toString(),
-                'longitude_masuk': item['longitude_masuk'].toString(),
-                'link_gambar_masuk': item['link_gambar_masuk'].toString(),
-                'latitude_pulang': item['latitude_pulang'].toString(),
-                'longitude_pulang': item['longitude_pulang'].toString(),
-                'link_gambar_pulang': item['link_gambar_pulang'].toString(),
-              }),
+                    'userid': item['userid'].toString(),
+                    'fullname': item['fullname'].toString(),
+                    'tanggal': item['tanggal'].toString(),
+                    'absen_masuk': item['absen_masuk'].toString(),
+                    'absen_pulang': item['absen_pulang'].toString(),
+                    'latitude_masuk': item['latitude_masuk'].toString(),
+                    'longitude_masuk': item['longitude_masuk'].toString(),
+                    'link_gambar_masuk': item['link_gambar_masuk'].toString(),
+                    'latitude_pulang': item['latitude_pulang'].toString(),
+                    'longitude_pulang': item['longitude_pulang'].toString(),
+                    'link_gambar_pulang': item['link_gambar_pulang'].toString(),
+                  }),
             );
             _isLoading = false;
           });
@@ -85,33 +86,43 @@ class _AbsensiScreenState extends State<AbsensiScreen> {
                     child: Column(
                       children: [
                         // Tabel untuk data absensi dengan pagination
-                        PaginatedDataTable(
-                          header: Text(
-                            'Data Absensi',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
+
+                        DataTableTheme(
+                          data: DataTableThemeData(
+                            headingRowColor: MaterialStateProperty.all(
+                                Colors.blue.shade100), // Warna header
+                            dataRowColor: MaterialStateProperty.all(
+                                Colors.grey.shade200), // Warna baris data
+                            decoration: BoxDecoration(color: Colors.amber),
+                            dividerThickness: 1, // Ketebalan pembatas
                           ),
-                          rowsPerPage: 10, // Menampilkan 10 baris per halaman
-                          columns: [
-                            DataColumn(label: Text('User ID')),
-                            DataColumn(label: Text('Tanggal')),
-                            DataColumn(label: Text('Absen Masuk')),
-                            DataColumn(label: Text('Absen Pulang')),
-                            DataColumn(label: Text('Latitude Masuk')),
-                            DataColumn(label: Text('Latitude Pulang')),
-                            DataColumn(label: Text('Link Gambar Masuk')),
-                            DataColumn(label: Text('Link Gambar Pulang')),
-                          ],
-                          source: _DataSource(_absensiData),
+                          child: PaginatedDataTable(
+                            arrowHeadColor: Colors.black,
+                            rowsPerPage: 10,
+                            columns: [
+                              // DataColumn(label: Text('User ID')),
+                              DataColumn(label: Text('Tanggal')),
+                              DataColumn(label: Text('Nama')),
+
+                              DataColumn(label: Text('Absen Masuk')),
+                              DataColumn(label: Text('Absen Pulang')),
+                              DataColumn(label: Text('Latitude Masuk')),
+                              DataColumn(label: Text('Latitude Pulang')),
+                              DataColumn(label: Text('Link Gambar Masuk')),
+                              DataColumn(label: Text('Link Gambar Pulang')),
+                            ],
+                            source: _DataSource(_absensiData),
+                          ),
                         ),
+
                         SizedBox(height: defaultPadding),
                         // Responsive tampilkan StorageDetails jika mobile
-                        if (Responsive.isMobile(context))
-                          StorageDetails(),
+                        if (Responsive.isMobile(context)) StorageDetails(),
                       ],
                     ),
                   ),
-                  if (!Responsive.isMobile(context)) SizedBox(width: defaultPadding),
+                  if (!Responsive.isMobile(context))
+                    SizedBox(width: defaultPadding),
                   if (!Responsive.isMobile(context))
                     Expanded(
                       flex: 2,
@@ -132,18 +143,39 @@ class _DataSource extends DataTableSource {
 
   _DataSource(this.data);
 
+  String extractTime(String datetime) {
+    return datetime.substring(11); // Memotong untuk mendapatkan hanya waktu
+  }
+
   @override
   DataRow getRow(int index) {
     final row = data[index];
     return DataRow(cells: [
-      DataCell(Text(row['userid']!)),
+      // DataCell(Text(row['userid']!)),
       DataCell(Text(row['tanggal']!)),
-      DataCell(Text(row['absen_masuk']!)),
-      DataCell(Text(row['absen_pulang']!)),
+      DataCell(Text(row['fullname']!)),
+
+      DataCell(Text(extractTime(row['absen_masuk']!))),
+      DataCell(Text(extractTime(row['absen_pulang']!))),
       DataCell(Text(row['latitude_masuk']!)),
       DataCell(Text(row['latitude_pulang']!)),
       DataCell(Text(row['link_gambar_masuk']!)),
-      DataCell(Text(row['link_gambar_pulang']!)),
+      // DataCell(Text(row['link_gambar_pulang']!)),
+      DataCell(Row(
+        children: [
+          IconButton.filled(onPressed: () {}, icon: Icon(Icons.map)),
+          IconButton.filled(
+            onPressed: () {},
+            icon: Icon(Icons.map),
+            style: IconButton.styleFrom(
+              backgroundColor: Colors.blue, // Warna latar belakang
+              foregroundColor: Colors.white, // Warna ikon
+            ),
+          ),
+          IconButton.filled(onPressed: () {}, icon: Icon(Icons.macro_off)),
+          IconButton.filled(onPressed: () {}, icon: Icon(Icons.macro_off))
+        ],
+      )),
     ]);
   }
 
